@@ -15,6 +15,16 @@ $mdl_get_users = function (Request $request, Response $response, callable $next)
   $response = $next($request, $response);
   return $response->withJson(Users::getUsers(), 200);
 };
+$mdl_login = function (Request $request, Response $response, callable $next) {
+  if (key_exists("error", ConnectionDB::connect())):
+    return $response->withJson(ConnectionDB::connect(), 500);
+  endif;
+  if (key_exists("error", Users::login($request->getParsedBody()))):
+    return $response->withJson(Users::login($request->getParsedBody()), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Users::login($request->getParsedBody()), 200);
+};
 $mdl_insert_user = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::connect())):
     return $response->withJson(ConnectionDB::connect(), 500);
@@ -24,4 +34,14 @@ $mdl_insert_user = function (Request $request, Response $response, callable $nex
   endif;*/
   $response = $next($request, $response);
   return $response->withJson(Users::insertUser($request, $request->getParsedBody()), 200);
+};
+$mdl_update_user = function (Request $request, Response $response, callable $next) {
+  if (key_exists("error", ConnectionDB::connect())):
+    return $response->withJson(ConnectionDB::connect(), 500);
+  endif;
+  /*if (key_exists("error", Users::insertUser($request, $request->getParsedBody()))):
+    return $response->withJson(Users::insertUser($request, $request->getParsedBody()), 400);
+  endif;*/
+  $response = $next($request, $response);
+  return $response->withJson(Users::updateUser($request, $request->getParsedBody()), 200);
 };
