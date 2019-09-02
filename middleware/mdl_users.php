@@ -15,6 +15,16 @@ $mdl_get_users = function (Request $request, Response $response, callable $next)
   $response = $next($request, $response);
   return $response->withJson(Users::getUsers(), 200);
 };
+$mdl_detail_users = function (Request $request, Response $response, callable $next) {
+  if (key_exists("error", ConnectionDB::connect())):
+    return $response->withJson(ConnectionDB::connect(), 500);
+  endif;
+  if (key_exists("error", Users::detailUser($request->getParsedBody()))):
+    return $response->withJson(Users::detailUser($request->getParsedBody()), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Users::detailUser($request->getParsedBody()), 200);
+};
 $mdl_login = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::connect())):
     return $response->withJson(ConnectionDB::connect(), 500);
