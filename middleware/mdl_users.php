@@ -39,9 +39,19 @@ $mdl_update_user = function (Request $request, Response $response, callable $nex
   if (key_exists("error", ConnectionDB::connect())):
     return $response->withJson(ConnectionDB::connect(), 500);
   endif;
-  /*if (key_exists("error", Users::insertUser($request, $request->getParsedBody()))):
-    return $response->withJson(Users::insertUser($request, $request->getParsedBody()), 400);
+  /*if (key_exists("error", Users::updateUser($request, $request->getParsedBody()))):
+    return $response->withJson(Users::updateUser($request, $request->getParsedBody()), 400);
   endif;*/
   $response = $next($request, $response);
   return $response->withJson(Users::updateUser($request, $request->getParsedBody()), 200);
+};
+$mdl_delete_user = function (Request $request, Response $response, callable $next) {
+  if (key_exists("error", ConnectionDB::connect())):
+    return $response->withJson(ConnectionDB::connect(), 500);
+  endif;
+  /*if (key_exists("error", Users::deleteUser($request->getParsedBody()))):
+    return $response->withJson(Users::deleteUser($request->getParsedBody()), 400);
+  endif;*/
+  $response = $next($request, $response);
+  return $response->withJson(Users::deleteUser($request->getParsedBody()), 200);
 };

@@ -142,12 +142,18 @@ class Users extends ConnectionDB
     }
 
   }
+  public static function deleteUser($body)
+  {
+    try{
+      $c = self::Connect();
+      $statement = $c->prepare("DELETE FROM users WHERE id=:id;");
+      $statement->bindParam(":id", $body['id'], \PDO::PARAM_INT);
+      $statement->execute();
+      $data = array("ok" => true, "message" => "Usuario eliminado");
+      return $data;
+    }catch (PDOException $exception){
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
 }
-
-
-
-/*[
-  "id" => $row['id'] ,
-  "username" => $row['username'],
-  "role" => $row['role'],
-]*/
