@@ -40,7 +40,7 @@ class Team extends ConnectionDB
       $c = self::Connect();
       $statement = $c->prepare("INSERT INTO teams (team) VALUES (:name);");
       $statement->bindParam(":name", $name);
-      $name = filter_var($body['name'], FILTER_SANITIZE_STRING);
+      $name = filter_var($body['team'], FILTER_SANITIZE_STRING);
       $statement->execute();
       if (!$statement):
         $data = array("ok" => false, "error" => "error en la consulta");

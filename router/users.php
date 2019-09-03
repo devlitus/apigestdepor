@@ -17,7 +17,7 @@ $app->post("/insert_user", function (Request $request, Response $response) {
 })->add($mdl_insert_user);
 $app->post("/update_user", function (Request $request, Response $response) {
 })->add($mdl_update_user);
-$app->post("/delete_user", function (Request $request, Response $response) {
+$app->delete("/delete_user", function (Request $request, Response $response) {
 })->add($mdl_delete_user);
 $app->add(function ($req, $res, $next) {
   $response = $next($req, $res);

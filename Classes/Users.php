@@ -149,8 +149,10 @@ class Users extends ConnectionDB
         endif;
       endif;
       $camps = substr($camps, 0, -1);
-      $query = $c->query("UPDATE users SET $camps WHERE id='$id';");
-      if (!$query->rowCount()):
+      $camps = substr($camps, 7);
+//      $consulta = "UPDATE users SET $camps WHERE id=$id;";
+      $query = $c->query("UPDATE users SET $camps WHERE id=$id;");
+      if (!$query):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
       endif;
