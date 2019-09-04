@@ -8,5 +8,5 @@ $app->post("/insert_team", function (Request $request, Response $response){
 })->add($mdl_insert_team);
 $app->put("/update_team", function (Request $request, Response $response){
 })->add($mdl_update_team);
-$app->post("/delete_team", function (Request $request, Response $response, $args){
+$app->post("/delete_team", function (Request $request, Response $response){
 })->add($mdl_delete_team);
