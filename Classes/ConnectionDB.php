@@ -11,7 +11,7 @@
   {
     private static $dns = "mysql:host=localhost;dbname=gestdepor";
     private static $user = "root";
-    private static $pass = "carles";
+    private static $pass = "";
 
     public function __construct()
     {
