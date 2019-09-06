@@ -41,7 +41,7 @@ class Users extends ConnectionDB
       $user = $statement->fetch();
       $pass = $user['password'];
       if (password_verify($body['password'], $pass)):
-        $data = array("ok" => true, "user" => ["id" => $user['id']]);
+        $data = array("ok" => true, "user" => $user);
         return $data;
       else:
         $data = array("ok" => false, "message" => "Usuari o contrasenya incorrecta");

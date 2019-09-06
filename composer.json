@@ -1,50 +1,50 @@
 {
-    "name": "apigestdepor",
-    "type": "api",
-    "description": "",
-    "homepage": "https://tecnovila.es",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Carles Pedrero",
-            "email": "carles@tecnovila.es",
-            "homepage": "https://tecnovila.es"
-        }
-    ],
-    "require": {
-        "php": ">=5.5.0",
-        "ext-json": "*",
-        "ext-libxml": "*",
-        "ext-simplexml": "*",
-        "pimple/pimple": "^3.0",
-        "psr/http-message": "^1.0",
-        "nikic/fast-route": "^1.0",
-        "container-interop/container-interop": "^1.2",
-        "psr/container": "^1.0",
-        "ext-pdo": "*"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^2.5",
-        "phpunit/phpunit": "^4.0"
-    },
-    "provide": {
-        "psr/http-message-implementation": "1.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Slim\\": "Slim",
-            "Connection\\": "Classes/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Slim\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": [
-            "phpunit",
-            "phpcs"
-        ]
+  "name": "apigestdepor",
+  "type": "api",
+  "description": "",
+  "homepage": "https://tecnovila.es",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Carles Pedrero",
+      "email": "carles@tecnovila.es",
+      "homepage": "https://tecnovila.es"
     }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-simplexml": "*",
+    "pimple/pimple": "^3.0",
+    "psr/http-message": "^1.0",
+    "nikic/fast-route": "^1.0",
+    "container-interop/container-interop": "^1.2",
+    "psr/container": "^1.0",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^2.5",
+    "phpunit/phpunit": "^4.0"
+  },
+  "provide": {
+    "psr/http-message-implementation": "1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Slim\\": "Slim",
+      "Connection\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Slim\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": [
+      "phpunit",
+      "phpcs"
+    ]
+  }
 }
