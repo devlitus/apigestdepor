@@ -18,12 +18,14 @@ class Users extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $statement = $c->prepare("select * from users;");
+      $statement = $c->prepare("select id, username, lastname, email, telf, address, img, dni, birthday from users;");
       $statement->execute();
       while ($rows = $statement->fetch()):
         $row[] = $rows;
       endwhile;
       $data = array("ok" => true, "users" => $row);
+      $c = null;
+      $statement = null;
       return $data;
     } catch (PDOException $e) {
       $data = array("ok" => false, "error" => $e->getMessage());
@@ -58,21 +60,11 @@ class Users extends ConnectionDB
     try {
       $c = self::Connect();
 
-      $statement = $c->prepare("SELECT * FROM users WHERE id=:id;");
+      $statement = $c->prepare("SELECT username, lastname, email, password, telf, address, img, dni, birthday FROM users WHERE id=:id;");
       $statement->bindParam(":id", $body['id'], \PDO::PARAM_INT);
       $statement->execute();
       $user = $statement->fetch();
-      $data = array("ok" => true, "user" => [
-        "username" => $user['username'],
-        "lastname" => $user["lastname"],
-        "email" => $user["email"],
-        "password" => $user["password"],
-        "telf" => $user["telf"],
-        "address" => $user["address"],
-        "img" => $user["img"],
-        "dni" => $user["dni"],
-        "birthday" => $user["birthday"]
-      ]);
+      $data = array("ok" => true, "user" => $user);
       return $data;
     } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
