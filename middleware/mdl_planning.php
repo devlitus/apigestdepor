@@ -15,6 +15,26 @@ $mdl_get_planning = function (Request $request, Response $response, callable $ne
   $response = $next($request, $response);
   return $response->withJson(Planning::getPlanning());
 };
+$mdl_only_planning = function (Request $request, Response $response, callable $next){
+  if (key_exists("error", ConnectionDB::Connect())):
+    return $response->withJson(ConnectionDB::Connect(), 500);
+  endif;
+  if (key_exists("error", Planning::onlyPlanning($request->getParsedBody()))):
+    return $response->withJson(Planning::onlyPlanning($request->getParsedBody()), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Planning::onlyPlanning($request->getParsedBody()));
+};
+$mdl_planning_team = function (Request $request, Response $response, callable $next){
+  if (key_exists("error", ConnectionDB::Connect())):
+    return $response->withJson(ConnectionDB::Connect(), 500);
+  endif;
+  if (key_exists("error", Planning::planningTeam($request->getParsedBody()))):
+    return $response->withJson(Planning::planningTeam($request->getParsedBody()), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Planning::planningTeam($request->getParsedBody()));
+};
 $mdl_insert_planning = function (Request $request, Response $response, callable $next){
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
