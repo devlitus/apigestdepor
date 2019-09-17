@@ -36,9 +36,32 @@ class Macro extends ConnectionDB
     }
   }
 
+  public static function macros()
+  {
+    try {
+      $c = self::Connect();
+      $row = [];
+      $query = $c->query("SELECT * FROM macro;");
+      if (!$query):
+        $data = array("ok" => false, "error" => "Error en la consulta");
+        return $data;
+      endif;
+      foreach ($query as $rows):
+        $row [] = $rows;
+      endforeach;
+      $data = array("ok" => true, "macro" => $row);
+      $c = null;
+      $query = null;
+      return $data;
+    } catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
+
   public static function insertMacro($body)
   {
-    try{
+    try {
       $c = self::connect();
       $statement = $c->prepare("INSERT INTO macro (macro, date_init, date_finish, material, id_planning) 
                                               VALUES (:macro, :date_init, :date_finish, :material, :id_planning);");
@@ -46,13 +69,13 @@ class Macro extends ConnectionDB
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
       $statement->bindParam(":id_planning", $body["idPlanning"]);
-      foreach ($body["material"] as $value){
+      foreach ($body["material"] as $value) {
         $statement->bindParam(":material", $value);
         $statement->execute();
       }
       $data = array("ok" => true, "message" => "correcto");
       return $data;
-    }catch (\PDOException $exception){
+    } catch (\PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage(), "message" => $exception->errorInfo);
       return $data;
     }

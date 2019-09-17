@@ -33,11 +33,38 @@ class Micros extends ConnectionDB
       return $data;
     }
   }
+
+  public static function materialMicro($body)
+  {
+    try {
+      $c = self::Connect();
+      $id = $body['id'];
+      $row = [];
+      $statement = $c->prepare("SELECT * FROM material_micro WHERE id_macro=:id;");
+      foreach ($body["id"] as $value):
+        $statement->bindParam(":id", $value);
+        $statement->execute();
+      endforeach;
+      foreach ($statement as $rows):
+        $row [] = $rows;
+      endforeach;
+      if (!$statement):
+        $data = array("ok" => false, "error" => "error en la consulta");
+        return $data;
+      endif;
+      $data = array("ok" => true, "matreial" => $row);
+      return $data;
+    } catch (\PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
+
   public static function insertMicro($body)
   {
-    try{
+    try {
       $c = self::Connect();
-      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, macro_id) 
+      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, id_planning) 
                                             VALUES (:micro, :date_init, :date_finish, :material, :macro_id)");
       $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
@@ -51,7 +78,7 @@ class Micros extends ConnectionDB
       $c = null;
       $statement = null;
       return $data;
-    }catch (\PDOException $exception){
+    } catch (\PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }
