@@ -34,6 +34,25 @@ class Team extends ConnectionDB
     }
   }
 
+  public static function onlyTeam($body)
+  {
+    try {
+      $c = self::Connect();
+      $id = $body["id"];
+      $query = $c->query("SELECT * FROM teams WHERE id=$id;");
+      if (!$query):
+        $data = array("ok" => false, "error" => "error en la consulta");
+        return $data;
+      endif;
+      $row = $query->fetch();
+      $data = array("ok" => true, "team" => $row);
+      return $data;
+    } catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
+
   public static function insert_team($body)
   {
     try {

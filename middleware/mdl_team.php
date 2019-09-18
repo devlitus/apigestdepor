@@ -15,6 +15,16 @@ $mdl_get_team = function (Request $request, Response $response, callable $next){
   $response = $next($request, $response);
   return $response->withJson(Team::getTeam(), 200);
 };
+$mdl_only_team = function (Request $request, Response $response, callable $next){
+  if (key_exists("error", ConnectionDB::Connect())):
+    return $response->withJson(ConnectionDB::Connect(), 500);
+  endif;
+  if (key_exists("error", Team::onlyTeam($request->getParsedBody()))):
+    return $response->withJson(Team::onlyTeam($request->getParsedBody()), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Team::onlyTeam($request->getParsedBody()), 200);
+};
 $mdl_insert_team = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);

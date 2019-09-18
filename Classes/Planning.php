@@ -6,6 +6,7 @@ namespace Connection;
 
 use PDO;
 use PDOException;
+use phpDocumentor\Reflection\Types\Null_;
 
 class Planning extends ConnectionDB
 {
@@ -31,6 +32,50 @@ class Planning extends ConnectionDB
       $data = array("ok" => true, "planning" => $row);
       $c = null;
       $statement = null;
+      return $data;
+    } catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
+
+  public static function onlyPlanning($body)
+  {
+    try {
+      $c = self::Connect();
+      $id = $body["id"];
+      $query = $c->query("SELECT * FROM planning WHERE id=$id;");
+      if (!$query) {
+        $data = array("ok" => false, "error" => "error en la consulta");
+        return $data;
+      }
+      $row = $query->fetch();
+      $data = array("ok" => true, "planning" => $row);
+      $c = null;
+      $query = null;
+      return $data;
+    } catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+
+  }
+
+  public static function planningTeam($body)
+  {
+    try {
+      $c = self::Connect();
+      $id = $body["id"];
+      $query = $c->query("select * from planning as p
+                                  inner join teams as t
+                                  on p.id = t.id_planning
+                                  where t.id=$id");
+      if (!$query):
+        $data = array("ok" => false, "error" => "error en la consulta");
+        return $data;
+      endif;
+      $row = $query->fetch();
+      $data = array("ok" => true, "planning" => $row);
       return $data;
     } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
@@ -64,7 +109,7 @@ class Planning extends ConnectionDB
         $c = null;
         return $data;
       endif;
-      $data = array("ok" => true, "Planificació introduida");
+      $data = array("ok" => true, "message" => "Planificació introduida");
       $c = null;
       return $data;
     } catch (PDOException $exception) {
