@@ -34,17 +34,21 @@ class Micros extends ConnectionDB
     }
   }
 
-  public static function materialMicro($body)
+  public static function getMaterialMicro($body)
   {
     try {
       $c = self::Connect();
-      $id = $body['id'];
       $row = [];
-      $statement = $c->prepare("SELECT * FROM material_micro WHERE id_macro=:id;");
-      foreach ($body["id"] as $value):
-        $statement->bindParam(":id", $value);
-        $statement->execute();
-      endforeach;
+      $statement = $c->prepare("select mami.id, mami.material_micro from material_micro as mami
+                                          inner join material_macro as mama
+                                          on mami.id_macro=mama.id
+                                          inner join macro as ma
+                                          on ma.material=mama.id
+                                          inner join planning as pl
+                                          on pl.id=ma.id_planning
+                                          where pl.id=:id and ma.macro=:macro;");
+      $statement->bindParam(":id", $body["id"]);
+      $statement->bindParam(":macro", $body["macro"]);
       foreach ($statement as $rows):
         $row [] = $rows;
       endforeach;
@@ -52,7 +56,7 @@ class Micros extends ConnectionDB
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
       endif;
-      $data = array("ok" => true, "matreial" => $row);
+      $data = array("ok" => true, "material" => $row);
       return $data;
     } catch (\PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
