@@ -3,6 +3,7 @@
 
 namespace Connection;
 
+use PDO;
 use PDOException;
 
 class Macro extends ConnectionDB
@@ -42,7 +43,7 @@ class Macro extends ConnectionDB
       $c = self::connect();
       $statement = $c->prepare("INSERT INTO macro (macro, date_init, date_finish, material, id_planning) 
                                               VALUES (:macro, :date_init, :date_finish, :material, :id_planning);");
-      $statement->bindParam(":macro", $body["macro"], \PDO::PARAM_STR);
+      $statement->bindParam(":macro", $body["macro"], PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
       $statement->bindParam(":id_planning", $body["idPlanning"]);

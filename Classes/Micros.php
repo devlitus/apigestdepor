@@ -4,6 +4,9 @@
 namespace Connection;
 
 
+use PDO;
+use PDOException;
+
 class Micros extends ConnectionDB
 {
   public function __construct()
@@ -28,7 +31,7 @@ class Micros extends ConnectionDB
       $c = null;
       $query = null;
       return $data;
-    } catch (\PDOException $exception) {
+    } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }
@@ -58,7 +61,7 @@ class Micros extends ConnectionDB
       endif;
       $data = array("ok" => true, "material" => $row);
       return $data;
-    } catch (\PDOException $exception) {
+    } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }
@@ -70,7 +73,7 @@ class Micros extends ConnectionDB
       $c = self::Connect();
       $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, id_planning) 
                                             VALUES (:micro, :date_init, :date_finish, :material, :macro_id)");
-      $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
+      $statement->bindParam(":micro", $body["micro"], PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
       $statement->bindParam(":macro_id", $body["idMacro"]);
@@ -82,7 +85,7 @@ class Micros extends ConnectionDB
       $c = null;
       $statement = null;
       return $data;
-    } catch (\PDOException $exception) {
+    } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }

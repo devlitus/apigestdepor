@@ -20,15 +20,14 @@ class Planning extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $statement = $c->prepare("SELECT * FROM planning;");
-      $statement->execute();
-      if (!$statement->rowCount() < 0):
+      $query = $c->query("SELECT * FROM planning;");
+      if (!$query):
         $data = array("ok" => false, "error" => "ERROR EN LA CONSULTA");
         return $data;
       endif;
-      while ($rows = $statement->fetch()):
+      foreach ($query as $rows):
         $row [] = $rows;
-      endwhile;
+      endforeach;
       $data = array("ok" => true, "planning" => $row);
       $c = null;
       $statement = null;
@@ -73,50 +72,6 @@ class Planning extends ConnectionDB
      $row = $query->fetch();
      $data = array("ok" => true, "team" => $row);
      return $data;
-    } catch (PDOException $exception) {
-      $data = array("ok" => false, "error" => $exception->getMessage());
-      return $data;
-    }
-  }
-
-  public static function onlyPlanning($body)
-  {
-    try {
-      $c = self::Connect();
-      $id = $body["id"];
-      $query = $c->query("SELECT * FROM planning WHERE id=$id;");
-      if (!$query) {
-        $data = array("ok" => false, "error" => "error en la consulta");
-        return $data;
-      }
-      $row = $query->fetch();
-      $data = array("ok" => true, "planning" => $row);
-      $c = null;
-      $query = null;
-      return $data;
-    } catch (PDOException $exception) {
-      $data = array("ok" => false, "error" => $exception->getMessage());
-      return $data;
-    }
-
-  }
-
-  public static function planningTeam($body)
-  {
-    try {
-      $c = self::Connect();
-      $id = $body["id"];
-      $query = $c->query("select * from planning as p
-                                  inner join teams as t
-                                  on p.id = t.id_planning
-                                  where t.id=$id");
-      if (!$query):
-        $data = array("ok" => false, "error" => "error en la consulta");
-        return $data;
-      endif;
-      $row = $query->fetch();
-      $data = array("ok" => true, "planning" => $row);
-      return $data;
     } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
