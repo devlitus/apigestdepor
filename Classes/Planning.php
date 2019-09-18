@@ -38,6 +38,46 @@ class Planning extends ConnectionDB
       return $data;
     }
   }
+  public static function onlyPlanning($body)
+  {
+    try{
+      $c = self::Connect();
+      $id = $body['id'];
+      $query = $c->query("SELECT * FROM planning WHERE id=$id;");
+      if (!$query):
+        $data = array("ok" => false, "error" => "ERROR EN LA CONSULTA");
+        return $data;
+      endif;
+      $row = $query->fetch();
+      $data = array("ok" => true, "planning" => $row);
+      return $data;
+    }catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
+
+  public static function planningTeam($body)
+  {
+    try {
+      $c = self::Connect();
+      $id = $body['id'];
+      $query = $c->query("select t.id , team, t.id_planning, planning from  teams as t
+                                  inner join planning as p
+                                  on t.id_planning = p.id
+                                  where t.id=$id;");
+      if (!$query):
+        $data = array("ok" => false, "error" => "Error en la consulta");
+        return $data;
+     endif;
+     $row = $query->fetch();
+     $data = array("ok" => true, "team" => $row);
+     return $data;
+    } catch (PDOException $exception) {
+      $data = array("ok" => false, "error" => $exception->getMessage());
+      return $data;
+    }
+  }
 
   public static function onlyPlanning($body)
   {

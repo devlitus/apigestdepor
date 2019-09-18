@@ -16,6 +16,16 @@ $mdl_get_macro = function (Request $request, Response $response, callable $next)
   $response = $next($request, $response);
   return $response->withJson(Macro::getMacro(), 200);
 };
+$mdl_macro = function (Request $request, Response $response, callable $next){
+  if (key_exists("error", ConnectionDB::Connect())):
+    return $response->withJson(ConnectionDB::Connect(), 500);
+  endif;
+  if (key_exists("error", Macro::macros())):
+    return $response->withJson(Macro::macros(), 400);
+  endif;
+  $response = $next($request, $response);
+  return $response->withJson(Macro::macros(), 200);
+};
 $mdl_get_material_macro = function (Request $request, Response $response, callable $next){
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
