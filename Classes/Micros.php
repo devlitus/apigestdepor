@@ -52,13 +52,14 @@ class Micros extends ConnectionDB
                                           where pl.id=:id and ma.macro=:macro;");
       $statement->bindParam(":id", $body["id"]);
       $statement->bindParam(":macro", $body["macro"]);
-      foreach ($statement as $rows):
-        $row [] = $rows;
-      endforeach;
+      $statement->execute();
       if (!$statement):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
       endif;
+      foreach ($statement as $rows):
+        $row [] = $rows;
+      endforeach;
       $data = array("ok" => true, "material" => $row);
       return $data;
     } catch (PDOException $exception) {
