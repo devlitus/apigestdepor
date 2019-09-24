@@ -119,7 +119,7 @@ class Users extends ConnectionDB
       $file = $statement->fetch();
       $file = $file['img'];
       if (key_exists("password", $body)):
-        $pass = password_hash($body['password'], PASSWORD_DEFAULT, ['cost' => 8]);
+        $pass = password_hash($body['password'], PASSWORD_DEFAULT, ['cost' => 10]);
         $new_pass = array("password" => $pass);
         $new_body = array_replace($body, $new_pass);
         foreach ($new_body as $item => $value):

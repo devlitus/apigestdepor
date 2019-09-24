@@ -6,6 +6,7 @@ namespace Connection;
 
 use PDO;
 use PDOException;
+use phpDocumentor\Reflection\Types\Null_;
 
 class Planning extends ConnectionDB
 {
@@ -19,15 +20,14 @@ class Planning extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $statement = $c->prepare("SELECT * FROM planning;");
-      $statement->execute();
-      if (!$statement->rowCount() < 0):
+      $query = $c->query("SELECT * FROM planning;");
+      if (!$query):
         $data = array("ok" => false, "error" => "ERROR EN LA CONSULTA");
         return $data;
       endif;
-      while ($rows = $statement->fetch()):
+      foreach ($query as $rows):
         $row [] = $rows;
-      endwhile;
+      endforeach;
       $data = array("ok" => true, "planning" => $row);
       $c = null;
       $statement = null;
@@ -105,7 +105,7 @@ class Planning extends ConnectionDB
         $c = null;
         return $data;
       endif;
-      $data = array("ok" => true, "Planificació introduida");
+      $data = array("ok" => true, "message" => "Planificació introduida");
       $c = null;
       return $data;
     } catch (PDOException $exception) {

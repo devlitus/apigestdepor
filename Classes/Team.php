@@ -19,43 +19,40 @@ class Team extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $query = $c->query("SELECT * FROM teams;");
-      if (!$query):
-        $data = array("ok" => false, "error" => "error de consulta");
-      return $data;
-      endif;
-      foreach ($query as $rows):
+      $statement = $c->prepare("SELECT * FROM teams;");
+      $statement->execute();
+      while ($rows = $statement->fetch()):
         $row [] = $rows;
-      endforeach;
+      endwhile;
       $data = array("ok" => true, "teams" => $row);
       $c = null;
-      $query = null;
+      $statement = null;
       return $data;
     } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }
   }
+
   public static function onlyTeam($body)
   {
-    try{
+    try {
       $c = self::Connect();
-      $id = $body['id'];
+      $id = $body["id"];
       $query = $c->query("SELECT * FROM teams WHERE id=$id;");
       if (!$query):
-        $data = array("ok" => false, "error" => "error de consulta");
+        $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
       endif;
       $row = $query->fetch();
       $data = array("ok" => true, "team" => $row);
-      $c = null;
-      $query = null;
       return $data;
-    }catch (PDOException $exception) {
+    } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;
     }
   }
+
   public static function insert_team($body)
   {
     try {

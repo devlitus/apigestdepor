@@ -9,6 +9,6 @@ $app->get("/planning", function (Request $request, Response $response) {
 $app->post("/only_planning", function (Request $request, Response $response) {
 })->add($mdl_only_planning);
 $app->post("/planning_team", function (Request $request, Response $response) {
-})->add($mdl_planning_team);
+})->add($mdl_planningTeam);
 $app->post("/insert_planning", function (Request $request, Response $response) {
 })->add($mdl_insert_planning);

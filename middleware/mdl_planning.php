@@ -5,7 +5,7 @@ use Connection\Planning;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-$mdl_get_planning = function (Request $request, Response $response, callable $next){
+$mdl_get_planning = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
   endif;
@@ -15,7 +15,7 @@ $mdl_get_planning = function (Request $request, Response $response, callable $ne
   $response = $next($request, $response);
   return $response->withJson(Planning::getPlanning());
 };
-$mdl_only_planning = function (Request $request, Response $response, callable $next){
+$mdl_only_planning = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
   endif;
@@ -25,7 +25,7 @@ $mdl_only_planning = function (Request $request, Response $response, callable $n
   $response = $next($request, $response);
   return $response->withJson(Planning::onlyPlanning($request->getParsedBody()));
 };
-$mdl_planning_team = function (Request $request, Response $response, callable $next){
+$mdl_planningTeam = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
   endif;
@@ -35,7 +35,7 @@ $mdl_planning_team = function (Request $request, Response $response, callable $n
   $response = $next($request, $response);
   return $response->withJson(Planning::planningTeam($request->getParsedBody()));
 };
-$mdl_insert_planning = function (Request $request, Response $response, callable $next){
+$mdl_insert_planning = function (Request $request, Response $response, callable $next) {
   if (key_exists("error", ConnectionDB::Connect())):
     return $response->withJson(ConnectionDB::Connect(), 500);
   endif;

@@ -3,6 +3,7 @@
 
 namespace Connection;
 
+use PDO;
 use PDOException;
 
 class Macro extends ConnectionDB
@@ -36,36 +37,18 @@ class Macro extends ConnectionDB
     }
   }
 
-  public static function macros()
-  {
-    try {
-      $c = self::Connect();
-      $row = [];
-      $query = $c->query("SELECT * FROM macro;");
-      if (!$query):
-        $data = array("ok" => false, "error" => "Error en la consulta");
-        return $data;
-      endif;
-      foreach ($query as $rows):
-        $row [] = $rows;
-      endforeach;
-      $data = array("ok" => true, "macro" => $row);
-      $c = null;
-      $query = null;
-      return $data;
-    } catch (PDOException $exception) {
-      $data = array("ok" => false, "error" => $exception->getMessage());
-      return $data;
-    }
-  }
-
+  /**
+   * Insertar nuevo macro
+   * @param $body
+   * @return array
+   */
   public static function insertMacro($body)
   {
     try {
       $c = self::connect();
       $statement = $c->prepare("INSERT INTO macro (macro, date_init, date_finish, material, id_planning) 
                                               VALUES (:macro, :date_init, :date_finish, :material, :id_planning);");
-      $statement->bindParam(":macro", $body["macro"], \PDO::PARAM_STR);
+      $statement->bindParam(":macro", $body["macro"], PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
       $statement->bindParam(":id_planning", $body["idPlanning"]);
