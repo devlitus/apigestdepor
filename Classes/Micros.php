@@ -16,7 +16,7 @@ class Micros extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $query = $c->query("SELECT * FROM micro;");
+      $query = $c->query("SELECT micro, planning_id, macro FROM micro group by micro, planning_id, macro");
       if (!$query):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
@@ -34,43 +34,18 @@ class Micros extends ConnectionDB
     }
   }
 
-  public static function materialMicro($body)
-  {
-    try {
-      $c = self::Connect();
-      $id = $body['id'];
-      $row = [];
-      $statement = $c->prepare("SELECT * FROM material_micro WHERE id_macro=:id;");
-      foreach ($body["id"] as $value):
-        $statement->bindParam(":id", $value);
-        $statement->execute();
-      endforeach;
-      foreach ($statement as $rows):
-        $row [] = $rows;
-      endforeach;
-      if (!$statement):
-        $data = array("ok" => false, "error" => "error en la consulta");
-        return $data;
-      endif;
-      $data = array("ok" => true, "matreial" => $row);
-      return $data;
-    } catch (\PDOException $exception) {
-      $data = array("ok" => false, "error" => $exception->getMessage());
-      return $data;
-    }
-  }
-
   public static function insertMicro($body)
   {
     try {
       $c = self::Connect();
-      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, id_planning) 
-                                            VALUES (:micro, :date_init, :date_finish, :material, :macro_id)");
+      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, planning_id, macro) 
+                                            VALUES (:micro, :date_init, :date_finish, :material, :planning_id, :macro)");
       $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
-      $statement->bindParam(":macro_id", $body["idMacro"]);
-      foreach ($body["material"] as $value):
+      $statement->bindParam(":planning_id", $body["idPlanning"]);
+      $statement->bindParam(":macro", $body["macro"]);
+      foreach ($body['material'] as $value):
         $statement->bindParam(":material", $value);
         $statement->execute();
       endforeach;

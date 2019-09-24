@@ -10,22 +10,25 @@ class MaterialMicro extends Macro
   {
     parent::__construct();
   }
-  public static function getMaterialMicro()
+  public static function getMaterialMicro($body)
   {
     try{
       $c = self::Connect();
       $row = [];
-      $query = $c->query("SELECT * FROM material_micro;");
-      if (!$query):
+      $statement = $c->prepare("call sp_material_macro_micro(:macro, :id);");
+      $statement->bindParam(":macro", $body["macro"], \PDO::PARAM_STR);
+      $statement->bindParam(":id", $body["id"], \PDO::PARAM_INT);
+      $statement->execute();
+      if (!$statement):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
       endif;
-      foreach ($query as $rows):
-        $row [] = $rows;
+      foreach ($statement as $value):
+        $row [] =  $value;
       endforeach;
       $data = array("ok" => true, "material" => $row);
       $c = null;
-      $query = null;
+      $statement = null;
       return $data;
     }catch (\PDOException $exception){
       $data = array("ok" => false, "error" => $exception->getMessage());

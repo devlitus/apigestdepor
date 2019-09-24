@@ -42,13 +42,14 @@ class Planning extends ConnectionDB
     try{
       $c = self::Connect();
       $id = $body['id'];
+      $row =  [];
       $query = $c->query("SELECT * FROM planning WHERE id=$id;");
       if (!$query):
         $data = array("ok" => false, "error" => "ERROR EN LA CONSULTA");
         return $data;
       endif;
-      $row = $query->fetch();
-      $data = array("ok" => true, "planning" => $row);
+      $planning = $query->fetch();
+      $data = array("ok" => true, "planning" => $planning);
       return $data;
     }catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
