@@ -18,12 +18,14 @@ class Users extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $statement = $c->prepare("select * from users;");
+      $statement = $c->prepare("select id, username, lastname, email, telf, address, img, dni, birthday from users;");
       $statement->execute();
       while ($rows = $statement->fetch()):
         $row[] = $rows;
       endwhile;
       $data = array("ok" => true, "users" => $row);
+      $c = null;
+      $statement = null;
       return $data;
     } catch (PDOException $e) {
       $data = array("ok" => false, "error" => $e->getMessage());
@@ -41,7 +43,7 @@ class Users extends ConnectionDB
       $user = $statement->fetch();
       $pass = $user['password'];
       if (password_verify($body['password'], $pass)):
-        $data = array("ok" => true, "user" => ["id" => $user['id']]);
+        $data = array("ok" => true, "user" => $user);
         return $data;
       else:
         $data = array("ok" => false, "message" => "Usuari o contrasenya incorrecta");
@@ -58,21 +60,11 @@ class Users extends ConnectionDB
     try {
       $c = self::Connect();
 
-      $statement = $c->prepare("SELECT * FROM users WHERE id=:id;");
+      $statement = $c->prepare("SELECT username, lastname, email, password, telf, address, img, dni, birthday FROM users WHERE id=:id;");
       $statement->bindParam(":id", $body['id'], \PDO::PARAM_INT);
       $statement->execute();
       $user = $statement->fetch();
-      $data = array("ok" => true, "user" => [
-        "username" => $user['username'],
-        "lastname" => $user["lastname"],
-        "email" => $user["email"],
-        "password" => $user["password"],
-        "telf" => $user["telf"],
-        "address" => $user["address"],
-        "img" => $user["img"],
-        "dni" => $user["dni"],
-        "birthday" => $user["birthday"]
-      ]);
+      $data = array("ok" => true, "user" => $user);
       return $data;
     } catch (PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
@@ -127,7 +119,7 @@ class Users extends ConnectionDB
       $file = $statement->fetch();
       $file = $file['img'];
       if (key_exists("password", $body)):
-        $pass = password_hash($body['password'], PASSWORD_DEFAULT, ['cost' => 8]);
+        $pass = password_hash($body['password'], PASSWORD_DEFAULT, ['cost' => 10]);
         $new_pass = array("password" => $pass);
         $new_body = array_replace($body, $new_pass);
         foreach ($new_body as $item => $value):
