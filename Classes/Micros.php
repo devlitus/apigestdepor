@@ -16,7 +16,7 @@ class Micros extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $query = $c->query("SELECT micro, planning_id, macro FROM micro group by micro, planning_id, macro");
+      $query = $c->query("SELECT micro, id_planning FROM micro group by micro, id_planning");
       if (!$query):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
@@ -38,12 +38,12 @@ class Micros extends ConnectionDB
   {
     try {
       $c = self::Connect();
-      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, planning_id, macro) 
-                                            VALUES (:micro, :date_init, :date_finish, :material, :planning_id, :macro)");
+      $statement = $c->prepare("INSERT INTO micro (micro, date_init, date_finish, material, id_planning, macro) 
+                                            VALUES (:micro, :date_init, :date_finish, :material, :id_planning, :macro)");
       $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
       $statement->bindParam(":date_init", $body["dateInit"]);
       $statement->bindParam(":date_finish", $body["dateFinish"]);
-      $statement->bindParam(":planning_id", $body["idPlanning"]);
+      $statement->bindParam(":id_planning", $body["idPlanning"]);
       $statement->bindParam(":macro", $body["macro"]);
       foreach ($body['material'] as $value):
         $statement->bindParam(":material", $value);

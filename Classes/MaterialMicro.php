@@ -15,7 +15,7 @@ class MaterialMicro extends Macro
     try{
       $c = self::Connect();
       $row = [];
-      $statement = $c->prepare("call sp_material_macro_micro(:macro, :id);");
+      $statement = $c->prepare("call sp_material_micro_macro(:macro, :id);");
       $statement->bindParam(":macro", $body["macro"], \PDO::PARAM_STR);
       $statement->bindParam(":id", $body["id"], \PDO::PARAM_INT);
       $statement->execute();
