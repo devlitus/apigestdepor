@@ -36,24 +36,27 @@ class Session extends ConnectionDB
   {
     try {
       $c = self::Connect();
-      $row = [];
-      $statement = $c->prepare("INSERT INTO sessions (session, date, planning_id, micro) 
-                                        VALUES (:session, :date, :planning_id, :micro);");
+      $statement = $c->prepare("INSERT INTO sessions (session, date_init, date_finish, material, id_planning, micro) 
+                                        VALUES (:session, :date_init, :date_finish, :planning_id, :material, :micro);");
       $statement->bindParam(":session", $body["session"], \PDO::PARAM_STR);
-      $statement->bindParam(":date", $body["date"]);
+      $statement->bindParam(":date_init", $body["dateInit"]);
+      $statement->bindParam(":date_finish", $body["dateFinish"]);
       $statement->bindParam(":planning_id", $body["idPlanning"], \PDO::PARAM_INT);
       $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
-      $statement->execute();
+      foreach ($body["material"] as $value):
+        $statement->bindParam(":material", $value);
+        $statement->execute();
+      endforeach;
       if (!$statement):
         $data = array("ok" => false, "error" => "error en la consulta");
+        $c = null;
+        $statement = null;
         return $data;
       endif;
-      foreach ($statement as $value):
-        $row [] = $value;
-      endforeach;
-      $data = array("ok" => true, "session" => $row);
+      $data = array("ok" => true, "message" => "insertado correctamente");
+      $c = null;
+      $statement = null;
       return $data;
-
     } catch (\PDOException $exception) {
       $data = array("ok" => false, "error" => $exception->getMessage());
       return $data;

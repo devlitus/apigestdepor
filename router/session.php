@@ -9,4 +9,4 @@ $app->get("/session", function (Request $request, Response $response) {
 $app->post("/material_session", function (Request $request, Response $response) {
 })->add($mdl_material_session);
 $app->post("/insert_session", function (Request $request, Response $response) {
-})->add($mdl_get_session);
+})->add($mdl_insert_session);

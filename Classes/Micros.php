@@ -16,7 +16,7 @@ class Micros extends ConnectionDB
     try {
       $c = self::Connect();
       $row = [];
-      $query = $c->query("SELECT micro, id_planning FROM micro group by micro, id_planning");
+      $query = $c->query("SELECT micro, id_planning, macro FROM micro group by micro, id_planning, macro");
       if (!$query):
         $data = array("ok" => false, "error" => "error en la consulta");
         return $data;
