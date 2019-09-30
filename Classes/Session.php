@@ -44,7 +44,7 @@ class Session extends ConnectionDB
       $statement->bindParam(":planning_id", $body["idPlanning"], \PDO::PARAM_INT);
       $statement->bindParam(":micro", $body["micro"], \PDO::PARAM_STR);
       foreach ($body["material"] as $value):
-        $statement->bindParam(":material", $value);
+        $statement->bindParam(":material", $value, \PDO::PARAM_INT);
         $statement->execute();
       endforeach;
       if (!$statement):

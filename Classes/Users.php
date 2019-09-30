@@ -33,6 +33,26 @@ class Users extends ConnectionDB
     }
   }
 
+  public static function getUserOrderDate($body)
+  {
+    try {
+      $c = self::Connect();
+      $row = [];
+      $statement = $c->prepare("select * from users order by birthday;");
+      $statement->execute();
+      while ($rows = $statement->fetch()):
+        $row[] = $rows;
+      endwhile;
+      $data = array("ok" => true, "users" => $row);
+      $c = null;
+      $statement = null;
+      return $data;
+    } catch (PDOException $e) {
+      $data = array("ok" => false, "error" => $e->getMessage());
+      return $data;
+    }
+  }
+
   public static function login($body)
   {
     try {
